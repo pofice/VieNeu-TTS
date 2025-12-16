@@ -14,7 +14,7 @@ import io
 import numpy as np
 import torch
 import soundfile as sf
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Header
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Header, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
@@ -142,6 +142,7 @@ async def health_check():
 
 @app.post("/synthesize")
 async def synthesize(
+    request: Request,
     text: str = Form(...),
     ref_text: str = Form(...),
     ref_codes: Optional[str] = Form(None),
@@ -218,9 +219,16 @@ async def synthesize(
         
         print(f"✅ Generated: {file_name}")
         
+        public_base = os.getenv("TTS_PUBLIC_BASE_URL")
+        if public_base:
+            base_url = public_base.rstrip("/")
+        else:
+            # Use the incoming request host (works well for cross-container access)
+            base_url = str(request.base_url).rstrip("/")
+
         return {
             "file_name": file_name,
-            "file_url": f"http://localhost:{SERVICE_PORT}/files/{file_name}"
+            "file_url": f"{base_url}/files/{file_name}",
         }
     
     except Exception as e:
