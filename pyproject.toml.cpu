@@ -1,0 +1,39 @@
+
+[tool.uv]
+index-strategy = "unsafe-best-match"
+required-environments = [
+    "sys_platform == 'win32' and platform_machine == 'AMD64'",
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchaudio = { index = "pytorch-cpu" }
+llama-cpp-python = { index = "llama-cpp-python-whl", marker = "sys_platform == 'win32'" }
+
+[[tool.uv.index]]
+name = "llama-cpp-python-whl"
+url = "https://abetlen.github.io/llama-cpp-python/whl/cpu"
+
+[project]
+name = "VieNeu-TTS"
+version = "0.1.0"
+description = "Advanced on-device Vietnamese TTS with instant voice cloning"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "phonemizer>=3.3.0",
+    "torch>=2.5.1",
+    "torchaudio>=2.5.1",
+    "neucodec>=0.0.4",
+    "librosa>=0.11.0",
+    "gradio>=5.49.1",
+    "onnxruntime>=1.23.2",
+    "datasets>=3.2.0",
+    "llama-cpp-python>=0.3.2",
+]

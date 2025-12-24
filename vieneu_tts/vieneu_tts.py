@@ -130,8 +130,7 @@ class VieNeuTTS:
             except ImportError as e:
                 raise ImportError(
                     "Failed to import `llama_cpp`. "
-                    "Please install it with:\n"
-                    "    pip install llama-cpp-python"
+                    "Xem hướng dẫn cài đặt llama_cpp_python tại: https://github.com/pnnbao97/VieNeu-TTS"
                 ) from e
             self.backbone = Llama.from_pretrained(
                 repo_id=backbone_repo,
@@ -425,7 +424,7 @@ class FastVieNeuTTS:
         memory_util=0.3,
         tp=1,
         enable_prefix_caching=True,
-        quant_policy=8,
+        quant_policy=0,
         enable_triton=True,
         max_batch_size=8,
     ):
@@ -486,7 +485,7 @@ class FastVieNeuTTS:
         except ImportError as e:
             raise ImportError(
                 "Failed to import `lmdeploy`. "
-                "Please install it with: pip install lmdeploy"
+                "Xem hướng dẫn cài đặt lmdeploy để tối ưu hiệu suất GPU tại: https://github.com/pnnbao97/VieNeu-TTS"
             ) from e
         
         backend_config = TurbomindEngineConfig(
@@ -503,11 +502,9 @@ class FastVieNeuTTS:
             top_p=0.95,
             top_k=50,
             temperature=1.0,
-            max_new_tokens=1024,
-            repetition_penalty=1.0,
+            max_new_tokens=2048,
             do_sample=True,
             min_new_tokens=40,
-            min_p=0.1,
         )
         
         print(f"   LMDeploy TurbomindEngine initialized")
